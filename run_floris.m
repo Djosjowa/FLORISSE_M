@@ -1,9 +1,9 @@
-function [ turbines, wakes, wtRows ] = run_floris(input,model,turbType,site,plots)
+function [turbines,wakes] = run_floris(input,model,turbType,site,plots)
 if nargin <= 4
     plots.plotLayout = false;  % plot farm layout w.r.t. inertial and wind frame
     plots.plot2DFlow = false ; % 2DflowFieldvisualisation in wind-aligned frame
     plots.plot3DFlow = false ; % 3DflowFieldvisualisation in wind-aligned frametimer.script = tic;
-end;
+end
 
 %% Core code
 LocIF = site.LocIF;
@@ -56,7 +56,7 @@ if (plots.plot2DFlow || plots.plot3DFlow)
     flowField.U  = site.uInfWf*ones(size(flowField.X));
     flowField.V  = zeros(size(flowField.X));
     flowField.W  = zeros(size(flowField.X));
-end;
+end
 
 % Start the core model. Without any visualization this is all that runs, It
 % computes the power produced at all turbines given the flow and
@@ -90,8 +90,8 @@ for turbirow = 1:length(wtRows) % for first to last row of turbines
         % Return only the downstream turbine row: wt_rows{turbirow+1}.
         turbines(wtRows{turbirow+1}) = floris_compute_windspeed(...
             turbines([wtRows{1:turbirow+1}]),wakes([wtRows{1:turbirow}]),site,turbType,wtRows,turbirow);
-    end;
-end;
+    end
+end
 %disp(['TIMER: core operations: ' num2str(toc(timer.core)) ' s.']);
 %% Plot the layout and flowfield visualization
 % Plot a map with the turbine layout and wake centerLines
@@ -109,7 +109,7 @@ end
 if plots.plot2DFlow
     figure;
     plot_2d_field( flowField,site,turbines,turbType )
-end;
+end
 
 % Plot the 3D flowfield as
 if plots.plot3DFlow
